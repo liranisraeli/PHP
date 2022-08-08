@@ -7,6 +7,8 @@ class DataBase{
 	private $dbName;
 	private $DbCon;
     
+    privat $connection;
+    
     public function __construct($dbHost,$dbUser,$dbPass,$dbName){
         $this->dbHost = $dbHost;
         $this->dbUser = $dbUser;
