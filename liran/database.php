@@ -7,8 +7,6 @@ class DataBase{
 	private $dbName;
 	private $DbCon;
     
-    privat $connection;
-    
     public function __construct($dbHost,$dbUser,$dbPass,$dbName){
         $this->dbHost = $dbHost;
         $this->dbUser = $dbUser;
@@ -29,6 +27,7 @@ class DataBase{
     
     //select 
     public function select($table,$row="*",$where=null,$order=null){
+        $itemArray = array();
 		$query='SELECT '.$row.' FROM '.$table;
 		if($where!=null){
 			$query.=' WHERE '.$where;
@@ -36,18 +35,25 @@ class DataBase{
 		if($order!=null){
 			$query.=' ORDER BY '.$order;
 		}
-		$result=$this->DbCon->query($query);
-         
-        $resultCheck = mysqli_num_rows($result);
-    
-        if($resultCheck>0){
-            while($row = mysqli_fetch_assoc($result)){
-                echo $row['name'] ."<br>";
-            }
         
-        }else{
-            echo "no results";
+		$result = $this->DbCon->query($query);
+        
+        while ($row = mysqli_fetch_assoc($result)) {
+            $itemArray[] = $row;
         }
+        
+        return $itemArray;
+         
+//        $resultCheck = mysqli_num_rows($result);
+//    
+//        if($resultCheck>0){
+//            while($row = mysqli_fetch_assoc($result)){
+//                //echo $row['name'] ."<br>";
+//            }
+//        
+//        }else{
+//            echo "no results";
+//        }
 
 	}
     

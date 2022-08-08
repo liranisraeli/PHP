@@ -3,10 +3,13 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    // Include cURL
+    require_once './posts.php';
+
     // Create DB connection
     require_once './database.php';
-    $newData = new DataBase("localhost", "root", "", "test");
-    echo $newData->connect() . "<br>";
+    $database = new DataBase("localhost", "root", "", "test");
+    echo $database->connect();
 
     // Create image file from URL
     $url = 'https://cdn2.vectorstock.com/i/1000x1000/23/81/default-avatar-profile-icon-vector-18942381.jpg';
@@ -59,11 +62,9 @@
     */
     
      //05 select all the active users + their posts
-    /*
     
-    echo $newData->select('users, posts',"*","users.id = posts.user_id AND users.active = 'true';");
     
-    */
+    $users = $database->select('users',"*","users.active = 'true';");
     
 
     /*
@@ -91,9 +92,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        }
+        
+        td, th {
+            border: 1px solid;
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body>
+
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            //print_r($users);
+            
+            //print_r($jsonplaceholder_users);
+            
+            foreach($users as $key=>$user){
+                    echo '<tr>';
+                        echo '<td>'.$user['id'].'</td>';
+                        echo '<td><img src="./avatar.jpg" style="width: 30px;"></td>';
+                        echo '<td>'.$user['name'].'</td>';
+                        echo '<td>'.$user['email'].'</td>';
+                        echo '<td>'.$user['active'].'</td>';
+                    echo '</tr>';
+                
+                    $user_posts = getUserPosts($user['id']);
+                    print_r($user_posts);
+                
+                    echo '<tr>';
+                        echo '<td colspan="5"></td>';
+                    echo '</tr>';
+                
+                }
+            ?>
+        </tbody>
+    </table>
+    
+    <script>
+    </script>
 
 </body>
 
